@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ScrollView,
 export default function Desayuno() {
   const [pais, setPais] = useState('');
   const [data, setData] = useState(null);
-  const [recetas, setRecetas] = useState([]); // Cambié a array para múltiples recetas
+  const [recetas, setRecetas] = useState([]); // array para múltiples recetas
   const [loading, setLoading] = useState(false);
 
   const normalizePais = (input) => input.trim().toLowerCase();
