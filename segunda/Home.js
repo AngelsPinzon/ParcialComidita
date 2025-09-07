@@ -1,5 +1,39 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useRef } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Animated } from 'react-native';
+
+function AnimatedButton({ onPress, children, style }) {
+  const scale = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.spring(scale, {
+      toValue: 0.95,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scale, {
+      toValue: 1,
+      friction: 3,
+      tension: 40,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  return (
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={onPress}
+        style={style}
+      >
+        {children}
+      </TouchableOpacity>
+    </Animated.View>
+  );
+}
 
 export default function Home({ navigation }) {
   return (
@@ -24,47 +58,55 @@ export default function Home({ navigation }) {
 
       {/* Opciones del menú */}
       <View style={styles.menuRow}>
-        <TouchableOpacity onPress={() => navigation.navigate('Desayuno', { opcion: 'Desayuno' })}>
-          <Image
-            style={styles.menuImage}
-            source={{
-              uri: 'https://www.recetasderechupete.com/wp-content/uploads/2018/09/Desayuno.jpg',
-            }}
-          />
-          <Text style={styles.menuText}>Desayuno 🥐</Text>
-        </TouchableOpacity>
+        <AnimatedButton onPress={() => navigation.navigate('Desayuno', { opcion: 'Desayuno' })}>
+          <View>
+            <Image
+              style={styles.menuImage}
+              source={{
+                uri: 'https://www.recetasderechupete.com/wp-content/uploads/2018/09/Desayuno.jpg',
+              }}
+            />
+            <Text style={styles.menuText}>Desayuno 🥐</Text>
+          </View>
+        </AnimatedButton>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Details', { opcion: 'Almuerzo' })}>
-          <Image
-            style={styles.menuImage}
-            source={{
-              uri: 'https://www.shutterstock.com/image-photo/table-food-top-view-600nw-467823860.jpg',
-            }}
-          />
-          <Text style={styles.menuText}>Almuerzo 🍲</Text>
-        </TouchableOpacity>
+        <AnimatedButton onPress={() => navigation.navigate('Details', { opcion: 'Almuerzo' })}>
+          <View>
+            <Image
+              style={styles.menuImage}
+              source={{
+                uri: 'https://www.shutterstock.com/image-photo/table-food-top-view-600nw-467823860.jpg',
+              }}
+            />
+            <Text style={styles.menuText}>Almuerzo 🍲</Text>
+          </View>
+        </AnimatedButton>
       </View>
 
       <View style={styles.menuRow}>
-        <TouchableOpacity onPress={() => navigation.navigate('Details', { opcion: 'Cena' })}>
-          <Image
-            style={styles.menuImage}
-            source={{
-              uri: 'https://media-cdn.tripadvisor.com/media/photo-s/11/a2/97/1e/la-cena-de-noche-buena.jpg',
-            }}
-          />
-          <Text style={styles.menuText}>Cena 🍷</Text>
-        </TouchableOpacity>
+        <AnimatedButton onPress={() => navigation.navigate('Details', { opcion: 'Cena' })}>
+          <View>
+            <Image
+              style={styles.menuImage}
+              source={{
+                uri: 'https://media-cdn.tripadvisor.com/media/photo-s/11/a2/97/1e/la-cena-de-noche-buena.jpg',
+              }}
+            />
+            <Text style={styles.menuText}>Cena 🍷</Text>
+          </View>
+        </AnimatedButton>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Details', { opcion: 'Postres' })}>
-          <Image
-            style={styles.menuImage}
-            source={{
-              uri: 'https://vecinavegetariana.com/wp-content/uploads/2022/03/Merengon-Vegano-3-1.jpeg',
-            }}
-          />
-          <Text style={styles.menuText}>Postres 🍰</Text>
-        </TouchableOpacity>
+        <AnimatedButton onPress={() => navigation.navigate('Details', { opcion: 'Postres' })}>
+          <View>
+            <Image
+              style={styles.menuImage}
+              source={{
+                uri: 'https://vecinavegetariana.com/wp-content/uploads/2022/03/Merengon-Vegano-3-1.jpeg',
+              }}
+            />
+            <Text style={styles.menuText}>Postres 🍰</Text>
+          </View>
+        </AnimatedButton>
       </View>
     </ScrollView>
   );
@@ -87,12 +129,12 @@ const styles = StyleSheet.create({
     position: "relative",
     marginBottom: 20,
     borderRadius: 20,
-    overflow: "hidden", // importante para que el borde redondeado afecte la imagen
+    overflow: "hidden",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
-    elevation: 8, // sombra en Android
+    elevation: 8,
   },
   headerImage: {
     width: "100%",
