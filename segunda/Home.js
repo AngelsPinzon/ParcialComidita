@@ -6,7 +6,7 @@ export default function Home({ navigation }) {
     <ScrollView style={styles.container}>
       {/* Título principal */}
       <Text style={styles.title}>
-        Bienvenidos a Restaurante Gourmet 🍴
+        Bienvenidos a Recetas Gourmet 🍴
       </Text>
 
       {/* Imagen principal (Header) */}
@@ -18,13 +18,13 @@ export default function Home({ navigation }) {
           }}
         />
         <View style={styles.overlay}>
-          <Text style={styles.headerText}>Tu experiencia gastronómica</Text>
+          <Text style={styles.headerText}>Recetas de comiditas</Text>
         </View>
       </View>
 
       {/* Opciones del menú */}
       <View style={styles.menuRow}>
-        <TouchableOpacity onPress={() => navigation.navigate('Details', { opcion: 'Desayuno' })}>
+        <TouchableOpacity onPress={() => navigation.navigate('Desayuno', { opcion: 'Desayuno' })}>
           <Image
             style={styles.menuImage}
             source={{
