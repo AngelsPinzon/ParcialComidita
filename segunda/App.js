@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Details from './Details';
 import Home from './Home';
 import Desayuno from './Desayuno';
+import Postres from './Postres';
 
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -17,6 +18,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
         <Stack.Screen name="Desayuno" component={Desayuno} options={{ headerShown: false }} />
+        <Stack.Screen name="Postres" component={Postres} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

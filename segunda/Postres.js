@@ -11,7 +11,7 @@ import {
     Animated
 } from 'react-native';
 
-export default function Desayuno({ navigation }) {
+export default function Postres({ navigation }) {
     const [pais, setPais] = useState('');
     const [data, setData] = useState(null);
     const [recetas, setRecetas] = useState([]);
@@ -41,6 +41,7 @@ export default function Desayuno({ navigation }) {
             'united kingdom': 'British',
             'reino unido': 'British',
             'kenya': 'Kenyan',
+            'malaysia': 'Malaysian',
         };
         return map[paisInput] || paisInput;
     };
@@ -78,19 +79,20 @@ export default function Desayuno({ navigation }) {
             const paisNormalized = normalizePais(nombrePais);
             const areaTheMealDB = mapPaisToTheMealDBArea(paisNormalized);
 
-            const responseBreakfast = await fetch(
-                'https://www.themealdb.com/api/json/v1/1/filter.php?c=Breakfast'
+            // Cambiar categoría a 'Dessert'
+            const responseDessert = await fetch(
+                'https://www.themealdb.com/api/json/v1/1/filter.php?c=Dessert'
             );
-            const jsonBreakfast = await responseBreakfast.json();
+            const jsonDessert = await responseDessert.json();
 
-            if (!jsonBreakfast.meals || jsonBreakfast.meals.length === 0) {
+            if (!jsonDessert.meals || jsonDessert.meals.length === 0) {
                 setRecetas([]);
-                setRecetaMensaje("No tenemos recetas de desayuno registradas 😔");
+                setRecetaMensaje("No tenemos recetas de postres registradas 😔");
                 setLoading(false);
                 return;
             }
 
-            const mealsToCheck = jsonBreakfast.meals.slice(0, 50);
+            const mealsToCheck = jsonDessert.meals.slice(0, 50);
             const recetasEncontradas = [];
 
             for (const meal of mealsToCheck) {
@@ -110,12 +112,11 @@ export default function Desayuno({ navigation }) {
 
             if (recetasEncontradas.length === 0) {
                 setRecetas([]);
-                setRecetaMensaje("No tenemos recetas de desayuno para este país 😔");
+                setRecetaMensaje("No tenemos recetas de postres para este país 😔");
                 setLoading(false);
                 return;
             }
 
-            // Aquí ya no se traduce, se usan las instrucciones originales en inglés
             setRecetas(recetasEncontradas);
         } catch (error) {
             console.error(error);
@@ -155,7 +156,7 @@ export default function Desayuno({ navigation }) {
 
     return (
         <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-            <Text style={styles.title}>Desayuno 🥐</Text>
+            <Text style={styles.title}>Postres 🍰</Text>
             <Text style={styles.subtitle}>Busca un país por su nombre completo en inglés:</Text>
 
             <TextInput
@@ -187,7 +188,7 @@ export default function Desayuno({ navigation }) {
 
             {recetas.length > 0 && (
                 <View style={styles.recipeListContainer}>
-                    <Text style={styles.recetaTitle}>🍽️ Desayunos recomendados:</Text>
+                    <Text style={styles.recetaTitle}>🍽️ Postres recomendados:</Text>
                     {recetas.map((recetaItem) => (
                         <View key={recetaItem.idMeal} style={styles.recipeContainer}>
                             <Text style={styles.recipeName}>{recetaItem.strMeal}</Text>
