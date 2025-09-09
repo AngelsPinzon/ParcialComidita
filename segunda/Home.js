@@ -70,7 +70,7 @@ export default function Home({ navigation }) {
           </View>
         </AnimatedButton>
 
-        <AnimatedButton onPress={() => navigation.navigate('Details', { opcion: 'Almuerzo' })}>
+        <AnimatedButton onPress={() => navigation.navigate('Almuerzo', { opcion: 'Almuerzo' })}>
           <View>
             <Image
               style={styles.menuImage}

@@ -78,20 +78,21 @@ export default function Almuerzo({ navigation }) {
             const paisNormalized = normalizePais(nombrePais);
             const areaTheMealDB = mapPaisToTheMealDBArea(paisNormalized);
 
-            // 🔹 Cambiamos de Breakfast a Miscellaneous (almuerzos variados)
-            const responseLunch = await fetch(
-                'https://www.themealdb.com/api/json/v1/1/filter.php?c=Miscellaneous'
+            // Buscar recetas por área (país)
+            const responseArea = await fetch(
+                `https://www.themealdb.com/api/json/v1/1/filter.php?a=${encodeURIComponent(areaTheMealDB)}`
             );
-            const jsonLunch = await responseLunch.json();
+            const jsonArea = await responseArea.json();
 
-            if (!jsonLunch.meals || jsonLunch.meals.length === 0) {
+            if (!jsonArea.meals || jsonArea.meals.length === 0) {
                 setRecetas([]);
-                setRecetaMensaje("No tenemos recetas de almuerzo registradas 😔");
+                setRecetaMensaje("No tenemos recetas registradas para este país 😔");
                 setLoading(false);
                 return;
             }
 
-            const mealsToCheck = jsonLunch.meals.slice(0, 50);
+            // Obtener detalles de hasta 5 recetas
+            const mealsToCheck = jsonArea.meals.slice(0, 5);
             const recetasEncontradas = [];
 
             for (const meal of mealsToCheck) {
@@ -101,19 +102,8 @@ export default function Almuerzo({ navigation }) {
                 const jsonDetalle = await responseDetalle.json();
 
                 if (jsonDetalle.meals && jsonDetalle.meals.length > 0) {
-                    const detalle = jsonDetalle.meals[0];
-                    if (detalle.strArea.toLowerCase() === areaTheMealDB.toLowerCase()) {
-                        recetasEncontradas.push(detalle);
-                        if (recetasEncontradas.length >= 5) break;
-                    }
+                    recetasEncontradas.push(jsonDetalle.meals[0]);
                 }
-            }
-
-            if (recetasEncontradas.length === 0) {
-                setRecetas([]);
-                setRecetaMensaje("No tenemos recetas de almuerzo para este país 😔");
-                setLoading(false);
-                return;
             }
 
             setRecetas(recetasEncontradas);
