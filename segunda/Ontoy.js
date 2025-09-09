@@ -21,13 +21,13 @@ export default function Ontoy({ navigation }) {
       // Ejemplo: recomendaciones "simuladas" según región
       if (loc.coords.latitude > 0) {
         setRecommendations([
-          { id: '1', name: 'Arepa con queso 🫓', image: 'https://www.laylita.com/recetas/wp-content/uploads/2012/11/Arepas-con-queso.jpg' },
-          { id: '2', name: 'Bandeja paisa 🍛', image: 'https://restaurantecienfuegos.com.co/wp-content/uploads/2020/07/bandeja-paisa.jpg' },
+          { id: '1', name: 'Arepa con queso 🫓', image: 'https://cocina-casera.com/wp-content/uploads/2023/01/receta-arepas-queso-colombaias-770x485.jpg' },
+          { id: '2', name: 'Bandeja paisa 🍛', image: 'https://labandejapaisa.wordpress.com/wp-content/uploads/2016/03/bandeja-paisa-gourmet-g.jpg' },
         ]);
       } else {
         setRecommendations([
-          { id: '1', name: 'Empanadas argentinas 🥟', image: 'https://www.paulinacocina.net/wp-content/uploads/2022/05/empanadas-argentinas.jpg' },
-          { id: '2', name: 'Asado 🥩', image: 'https://media-cdn.tripadvisor.com/media/photo-s/1a/32/3d/df/asado-argentino.jpg' },
+          { id: '1', name: 'Empanadas argentinas 🥟', image: 'https://imag.bonviveur.com/empanadas-argentinas-de-carne-foto-cerca.jpg' },
+          { id: '2', name: 'Asado 🥩', image: 'https://t3.ftcdn.net/jpg/03/55/26/50/360_F_355265030_XCbQvUzh6gsg1T60XyVtcFHsQ02v2YDQ.jpg' },
         ]);
       }
     })();

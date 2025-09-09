@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 16,
         textAlign: 'center',
-        color: '#8e44ad',
+        color: '#d35400',
     },
     subtitle: {
         fontSize: 16,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     button: {
-        backgroundColor: '#8e44ad',
+        backgroundColor: '#d35400',
         padding: 12,
         borderRadius: 8,
         alignItems: 'center',
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         padding: 12,
         borderRadius: 12,
-        backgroundColor: '#f5e6ff',
+        backgroundColor: '#ffe6cc',
     },
     flag: {
         width: 120,
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     recipeContainer: {
-        backgroundColor: '#f5e6ff',
+        backgroundColor: '#ffe6cc',
         padding: 16,
         borderRadius: 12,
         marginBottom: 20,

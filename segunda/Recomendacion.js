@@ -11,13 +11,13 @@ export default function Recomendacion({ navigation }) {
 
     if (hora >= 5 && hora < 11) {
       setMensaje('☀️ Es hora de un buen desayuno. ¡Prueba unos huevos con aguacate!');
-      setImagen('https://www.elmueble.com/medio/2023/09/13/huevos-con-aguacate_f65f3a79_230913135855_1200x630.jpg');
+      setImagen('https://mandolina.co/wp-content/uploads/2020/11/desayuno-saludable-sandwich-aguacate-y-huevo-1200x900.jpg');
     } else if (hora >= 11 && hora < 16) {
       setMensaje('🍝 Es hora del almuerzo. ¿Qué tal una pasta deliciosa?');
       setImagen('https://cdn7.kiwilimon.com/brightcove/8510/8510.jpg');
     } else if (hora >= 16 && hora < 20) {
       setMensaje('🍰 Un postre siempre viene bien a esta hora.');
-      setImagen('https://www.clara.es/medio/2023/09/12/tarta-de-queso-japonesa_00000000_230912100527_1200x630.jpg');
+      setImagen('https://pepacooks.com/wp-content/uploads/2014/08/tarta-de-queso-japonesa-8.jpg');
     } else {
       setMensaje('🍷 Hora de cenar algo ligero y delicioso.');
       setImagen('https://media-cdn.tripadvisor.com/media/photo-s/11/a2/97/1e/la-cena-de-noche-buena.jpg');
