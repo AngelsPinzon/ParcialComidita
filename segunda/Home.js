@@ -33,18 +33,20 @@ export default function Home({ navigation }) {
       {/* Título principal */}
       <Text style={styles.title}>Bienvenidos a Recetas Gourmet 🍴</Text>
 
-      {/* Imagen principal (Header) */}
-      <View style={styles.headerImageContainer}>
-        <Image
-          style={styles.headerImage}
-          source={{
-            uri: 'https://img.freepik.com/foto-gratis/vista-superior-variedad-comida-deliciosa-mesa_23-2148717374.jpg',
-          }}
-        />
-        <View style={styles.overlay}>
-          <Text style={styles.headerText}>Recetas de comiditas</Text>
+      {/* Imagen principal como botón */}
+      <AnimatedButton onPress={() => navigation.navigate('Ontoy')}>
+        <View style={styles.headerImageContainer}>
+          <Image
+            style={styles.headerImage}
+            source={{
+              uri: 'https://img.freepik.com/foto-gratis/vista-superior-variedad-comida-deliciosa-mesa_23-2148717374.jpg',
+            }}
+          />
+          <View style={styles.overlay}>
+            <Text style={styles.headerText}>🍽️ Recomendaciones según tu ubicación</Text>
+          </View>
         </View>
-      </View>
+      </AnimatedButton>
 
       {/* Opciones del menú */}
       <View style={styles.menuRow}>
@@ -99,7 +101,7 @@ export default function Home({ navigation }) {
         </AnimatedButton>
       </View>
 
-      {/* 🔥 Botón de Recomendación del Momento (fuera de menuRow) */}
+      {/* 🔥 Botón de Recomendación del Momento (según hora) */}
       <View style={styles.recomendacionContainer}>
         <AnimatedButton onPress={() => navigation.navigate('Recomendacion')}>
           <View style={styles.recomendacionButton}>
