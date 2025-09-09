@@ -6,6 +6,7 @@ import Desayuno from './Desayuno';
 import Almuerzo from './Almuerzo';
 import Postres from './Postres';
 import Cena from './Cena';
+import Recomendacion from './Recomendacion';
 
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name="Desayuno" component={Desayuno} options={{ headerShown: false }} />
         <Stack.Screen name="Postres" component={Postres} options={{ headerShown: false }}/>
         <Stack.Screen name="Cena" component={Cena} options={{ headerShown: false }} />
+        <Stack.Screen name="Recomendacion" component={Recomendacion} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

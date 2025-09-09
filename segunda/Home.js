@@ -5,19 +5,11 @@ function AnimatedButton({ onPress, children, style }) {
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
-    Animated.spring(scale, {
-      toValue: 0.95,
-      useNativeDriver: true,
-    }).start();
+    Animated.spring(scale, { toValue: 0.95, useNativeDriver: true }).start();
   };
 
   const handlePressOut = () => {
-    Animated.spring(scale, {
-      toValue: 1,
-      friction: 3,
-      tension: 40,
-      useNativeDriver: true,
-    }).start();
+    Animated.spring(scale, { toValue: 1, friction: 3, tension: 40, useNativeDriver: true }).start();
   };
 
   return (
@@ -39,9 +31,7 @@ export default function Home({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       {/* Título principal */}
-      <Text style={styles.title}>
-        Bienvenidos a Recetas Gourmet 🍴
-      </Text>
+      <Text style={styles.title}>Bienvenidos a Recetas Gourmet 🍴</Text>
 
       {/* Imagen principal (Header) */}
       <View style={styles.headerImageContainer}>
@@ -108,6 +98,15 @@ export default function Home({ navigation }) {
           </View>
         </AnimatedButton>
       </View>
+
+      {/* 🔥 Botón de Recomendación del Momento (fuera de menuRow) */}
+      <View style={styles.recomendacionContainer}>
+        <AnimatedButton onPress={() => navigation.navigate('Recomendacion')}>
+          <View style={styles.recomendacionButton}>
+            <Text style={styles.recomendacionText}>🌟 Ver recomendación del momento</Text>
+          </View>
+        </AnimatedButton>
+      </View>
     </ScrollView>
   );
 }
@@ -170,5 +169,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#2c3e50",
+  },
+  recomendacionContainer: {
+    marginTop: 10,
+    marginBottom: 40,
+    alignItems: "center",
+  },
+  recomendacionButton: {
+    backgroundColor: "#27ae60",
+    paddingVertical: 14,
+    paddingHorizontal: 30,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  recomendacionText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
