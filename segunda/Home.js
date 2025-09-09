@@ -84,7 +84,7 @@ export default function Home({ navigation }) {
       </View>
 
       <View style={styles.menuRow}>
-        <AnimatedButton onPress={() => navigation.navigate('Details', { opcion: 'Cena' })}>
+        <AnimatedButton onPress={() => navigation.navigate('Cena', { opcion: 'Cena' })}>
           <View>
             <Image
               style={styles.menuImage}
