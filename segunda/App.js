@@ -8,6 +8,7 @@ import Postres from './Postres';
 import Cena from './Cena';
 import Recomendacion from './Recomendacion';
 import Ontoy from './Ontoy';
+import Favoritos from "./Favoritos";
 
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -25,6 +26,7 @@ export default function App() {
         <Stack.Screen name="Cena" component={Cena} options={{ headerShown: false }} />
         <Stack.Screen name="Recomendacion" component={Recomendacion} options={{ headerShown: false }} />
         <Stack.Screen name="Ontoy" component={Ontoy} options={{ headerShown: false }} />
+        <Stack.Screen name="Favoritos" component={Favoritos} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

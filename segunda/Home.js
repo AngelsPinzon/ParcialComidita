@@ -33,7 +33,7 @@ export default function Home({ navigation }) {
       {/* Título principal */}
       <Text style={styles.title}>Bienvenidos a Recetas Gourmet 🍴</Text>
 
-      {/* Imagen principal como botón */}
+      {/* Imagen principal convertida en botón */}
       <AnimatedButton onPress={() => navigation.navigate('Ontoy')}>
         <View style={styles.headerImageContainer}>
           <Image
@@ -43,7 +43,7 @@ export default function Home({ navigation }) {
             }}
           />
           <View style={styles.overlay}>
-            <Text style={styles.headerText}>🍽️ Recomendaciones según tu ubicación</Text>
+            <Text style={styles.headerText}>Recetas de comiditas</Text>
           </View>
         </View>
       </AnimatedButton>
@@ -101,11 +101,20 @@ export default function Home({ navigation }) {
         </AnimatedButton>
       </View>
 
-      {/* 🔥 Botón de Recomendación del Momento (según hora) */}
+      {/* 🔥 Botón de Recomendación del Momento */}
       <View style={styles.recomendacionContainer}>
         <AnimatedButton onPress={() => navigation.navigate('Recomendacion')}>
           <View style={styles.recomendacionButton}>
             <Text style={styles.recomendacionText}>🌟 Ver recomendación del momento</Text>
+          </View>
+        </AnimatedButton>
+      </View>
+
+      {/* ⭐ Botón de Favoritos */}
+      <View style={styles.recomendacionContainer}>
+        <AnimatedButton onPress={() => navigation.navigate('Favoritos')}>
+          <View style={[styles.recomendacionButton, { backgroundColor: "#f39c12" }]}>
+            <Text style={styles.recomendacionText}>⭐ Ver Favoritos</Text>
           </View>
         </AnimatedButton>
       </View>
@@ -174,7 +183,7 @@ const styles = StyleSheet.create({
   },
   recomendacionContainer: {
     marginTop: 10,
-    marginBottom: 40,
+    marginBottom: 20,
     alignItems: "center",
   },
   recomendacionButton: {
