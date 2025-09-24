@@ -10,6 +10,8 @@ import {
     ActivityIndicator,
     Animated
 } from 'react-native';
+import { db } from "./firebase"; // 🔹 Importar conexión con Firebase
+import { collection, addDoc } from "firebase/firestore";
 
 export default function Desayuno({ navigation }) {
     const [pais, setPais] = useState('');
@@ -115,7 +117,6 @@ export default function Desayuno({ navigation }) {
                 return;
             }
 
-            // Aquí ya no se traduce, se usan las instrucciones originales en inglés
             setRecetas(recetasEncontradas);
         } catch (error) {
             console.error(error);
@@ -124,6 +125,21 @@ export default function Desayuno({ navigation }) {
             setRecetaMensaje("Error al buscar el país o la receta");
         } finally {
             setLoading(false);
+        }
+    };
+
+    // 🔹 Guardar receta en Firebase
+    const guardarFavorito = async (receta) => {
+        try {
+            await addDoc(collection(db, "favoritos"), {
+                name: receta.strMeal,
+                image: receta.strMealThumb,
+                instructions: receta.strInstructions,
+                createdAt: new Date(),
+            });
+            alert("✅ Receta guardada en favoritos");
+        } catch (error) {
+            console.error("Error al guardar favorito: ", error);
         }
     };
 
@@ -193,6 +209,14 @@ export default function Desayuno({ navigation }) {
                             <Text style={styles.recipeName}>{recetaItem.strMeal}</Text>
                             <Image source={{ uri: recetaItem.strMealThumb }} style={styles.recipeImage} />
                             <Text style={styles.recipeInstructions}>{recetaItem.strInstructions}</Text>
+
+                            {/* 🔹 Botón para agregar a favoritos */}
+                            <TouchableOpacity
+                                style={styles.favButton}
+                                onPress={() => guardarFavorito(recetaItem)}
+                            >
+                                <Text style={styles.favButtonText}>⭐ Agregar a Favoritos</Text>
+                            </TouchableOpacity>
                         </View>
                     ))}
                 </View>
@@ -207,110 +231,24 @@ export default function Desayuno({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#fff8f0',
-    },
-    title: {
-        fontSize: 26,
-        fontWeight: 'bold',
-        marginBottom: 16,
-        textAlign: 'center',
-        color: '#d35400',
-    },
-    subtitle: {
-        fontSize: 16,
-        marginBottom: 10,
-        textAlign: 'center',
-        color: '#333',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        marginBottom: 12,
-        borderRadius: 8,
-        backgroundColor: '#fff',
-    },
-    button: {
-        backgroundColor: '#d35400',
-        padding: 12,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    buttonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    result: {
-        alignItems: 'center',
-        marginBottom: 20,
-        padding: 12,
-        borderRadius: 12,
-        backgroundColor: '#ffe6cc',
-    },
-    flag: {
-        width: 120,
-        height: 80,
-        marginBottom: 12,
-    },
-    resultText: {
-        fontSize: 16,
-        marginBottom: 6,
-    },
-    recipeListContainer: {
-        marginBottom: 20,
-    },
-    recipeContainer: {
-        backgroundColor: '#ffe6cc',
-        padding: 16,
-        borderRadius: 12,
-        marginBottom: 20,
-    },
-    recetaTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        marginBottom: 12,
-        textAlign: 'center',
-        color: '#2c3e50',
-    },
-    recipeName: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 12,
-        textAlign: 'center',
-    },
-    recipeImage: {
-        width: '100%',
-        height: 200,
-        borderRadius: 12,
-        marginBottom: 12,
-    },
-    recipeInstructions: {
-        fontSize: 16,
-        lineHeight: 22,
-        color: '#333',
-        textAlign: 'justify',
-    },
-    recetaText: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#a94442',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    backButtonBottom: {
-        backgroundColor: '#2c3e50',
-        padding: 12,
-        borderRadius: 8,
-        marginTop: 30,
-        alignItems: 'center',
-    },
-    backButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
+    container: { flex: 1, padding: 16, backgroundColor: '#fff8f0' },
+    title: { fontSize: 26, fontWeight: 'bold', marginBottom: 16, textAlign: 'center', color: '#d35400' },
+    subtitle: { fontSize: 16, marginBottom: 10, textAlign: 'center', color: '#333' },
+    input: { borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 12, borderRadius: 8, backgroundColor: '#fff' },
+    button: { backgroundColor: '#d35400', padding: 12, borderRadius: 8, alignItems: 'center', marginBottom: 20 },
+    buttonText: { color: '#fff', fontWeight: 'bold' },
+    result: { alignItems: 'center', marginBottom: 20, padding: 12, borderRadius: 12, backgroundColor: '#ffe6cc' },
+    flag: { width: 120, height: 80, marginBottom: 12 },
+    resultText: { fontSize: 16, marginBottom: 6 },
+    recipeListContainer: { marginBottom: 20 },
+    recipeContainer: { backgroundColor: '#ffe6cc', padding: 16, borderRadius: 12, marginBottom: 20 },
+    recetaTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12, textAlign: 'center', color: '#2c3e50' },
+    recipeName: { fontSize: 20, fontWeight: 'bold', marginBottom: 12, textAlign: 'center' },
+    recipeImage: { width: '100%', height: 200, borderRadius: 12, marginBottom: 12 },
+    recipeInstructions: { fontSize: 16, lineHeight: 22, color: '#333', textAlign: 'justify' },
+    recetaText: { fontSize: 18, fontWeight: '600', color: '#a94442', textAlign: 'center', marginBottom: 20 },
+    favButton: { backgroundColor: '#27ae60', padding: 10, borderRadius: 8, marginTop: 10, alignItems: 'center' },
+    favButtonText: { color: '#fff', fontWeight: 'bold' },
+    backButtonBottom: { backgroundColor: '#2c3e50', padding: 12, borderRadius: 8, marginTop: 30, alignItems: 'center' },
+    backButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
 });

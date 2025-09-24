@@ -10,6 +10,8 @@ import {
     ActivityIndicator,
     Animated
 } from 'react-native';
+import { db } from './firebase'; // tu configuración de firebase
+import { collection, addDoc } from 'firebase/firestore';
 
 export default function Cena({ navigation }) {
     const [pais, setPais] = useState('');
@@ -88,7 +90,6 @@ export default function Cena({ navigation }) {
             const paisNormalized = normalizePais(nombrePais);
             const areaTheMealDB = mapPaisToTheMealDBArea(paisNormalized);
 
-            // Buscar recetas por área (país)
             const responseArea = await fetch(
                 `https://www.themealdb.com/api/json/v1/1/filter.php?a=${encodeURIComponent(areaTheMealDB)}`
             );
@@ -134,6 +135,22 @@ export default function Cena({ navigation }) {
             setRecetaMensaje("Error al buscar el país o la receta");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const agregarAFavoritos = async (receta) => {
+        try {
+            await addDoc(collection(db, "favoritos"), {
+                idMeal: receta.idMeal,
+                nombre: receta.strMeal,
+                imagen: receta.strMealThumb,
+                instrucciones: receta.strInstructions || "",
+                categoria: receta.strCategory,
+            });
+            alert("✅ Receta agregada a favoritos");
+        } catch (error) {
+            console.error("Error al guardar en favoritos: ", error);
+            alert("❌ No se pudo guardar en favoritos");
         }
     };
 
@@ -202,6 +219,14 @@ export default function Cena({ navigation }) {
                             <Text style={styles.recipeName}>{recetaItem.strMeal}</Text>
                             <Image source={{ uri: recetaItem.strMealThumb }} style={styles.recipeImage} />
                             <Text style={styles.recipeInstructions}>{recetaItem.strInstructions}</Text>
+
+                            {/* Botón para agregar a favoritos */}
+                            <TouchableOpacity
+                                style={styles.favButton}
+                                onPress={() => agregarAFavoritos(recetaItem)}
+                            >
+                                <Text style={styles.favButtonText}>❤️ Agregar a Favoritos</Text>
+                            </TouchableOpacity>
                         </View>
                     ))}
                 </View>
@@ -320,5 +345,16 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    favButton: {
+        marginTop: 10,
+        padding: 10,
+        backgroundColor: '#e74c3c',
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    favButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
     },
 });

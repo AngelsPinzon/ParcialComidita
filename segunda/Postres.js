@@ -1,3 +1,4 @@
+// Postres.js
 import React, { useState, useRef } from 'react';
 import {
     StyleSheet,
@@ -10,6 +11,8 @@ import {
     ActivityIndicator,
     Animated
 } from 'react-native';
+import { db } from "./firebase";  
+import { collection, addDoc } from "firebase/firestore";
 
 export default function Postres({ navigation }) {
     const [pais, setPais] = useState('');
@@ -79,7 +82,6 @@ export default function Postres({ navigation }) {
             const paisNormalized = normalizePais(nombrePais);
             const areaTheMealDB = mapPaisToTheMealDBArea(paisNormalized);
 
-            // Cambiar categoría a 'Dessert'
             const responseDessert = await fetch(
                 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Dessert'
             );
@@ -125,6 +127,22 @@ export default function Postres({ navigation }) {
             setRecetaMensaje("Error al buscar el país o la receta");
         } finally {
             setLoading(false);
+        }
+    };
+
+    // 🔹 Guardar en favoritos
+    const addFavorito = async (receta) => {
+        try {
+            await addDoc(collection(db, "favoritos"), {
+                name: receta.strMeal,
+                image: receta.strMealThumb,
+                instructions: receta.strInstructions,
+                createdAt: new Date(),
+            });
+            alert("✅ Postre agregado a favoritos");
+        } catch (error) {
+            console.error("Error al agregar favorito: ", error);
+            alert("❌ No se pudo agregar a favoritos");
         }
     };
 
@@ -194,6 +212,14 @@ export default function Postres({ navigation }) {
                             <Text style={styles.recipeName}>{recetaItem.strMeal}</Text>
                             <Image source={{ uri: recetaItem.strMealThumb }} style={styles.recipeImage} />
                             <Text style={styles.recipeInstructions}>{recetaItem.strInstructions}</Text>
+
+                            {/* 🔹 Botón para agregar a favoritos */}
+                            <TouchableOpacity
+                                style={styles.favoriteButton}
+                                onPress={() => addFavorito(recetaItem)}
+                            >
+                                <Text style={styles.favoriteButtonText}>⭐ Agregar a Favoritos</Text>
+                            </TouchableOpacity>
                         </View>
                     ))}
                 </View>
@@ -312,6 +338,18 @@ const styles = StyleSheet.create({
     backButtonText: {
         color: '#fff',
         fontWeight: 'bold',
+        fontSize: 16,
+    },
+    favoriteButton: {
+        backgroundColor: "#27ae60",
+        padding: 10,
+        borderRadius: 8,
+        marginTop: 10,
+        alignItems: "center",
+    },
+    favoriteButtonText: {
+        color: "#fff",
+        fontWeight: "bold",
         fontSize: 16,
     },
 });
