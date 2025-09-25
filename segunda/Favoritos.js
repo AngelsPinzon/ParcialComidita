@@ -17,10 +17,12 @@ export default function Favoritos({ navigation }) {
     fetchFavoritos();
   }, []);
 
-  // 🔹 Guardar un nuevo favorito de ejemplo
+  // 🔹 Guardar un nuevo favorito de prueba
   const addFavorito = async () => {
     await addDoc(collection(db, "favoritos"), {
       name: "Comida Ejemplo 🍔",
+      image: "https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg", // ejemplo
+      instructions: "Esto es un ejemplo de comida de prueba",
       createdAt: new Date(),
     });
     fetchFavoritos(); // recargar lista
@@ -41,11 +43,16 @@ export default function Favoritos({ navigation }) {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
-            {item.imagen && (
-              <Image source={{ uri: item.imagen }} style={styles.itemImage} />
+            {item.image && (
+              <Image source={{ uri: item.image }} style={styles.itemImage} />
             )}
             <View style={{ flex: 1 }}>
-              <Text style={styles.item}>🍴 {item.nombre || item.name}</Text>
+              <Text style={styles.item}>🍴 {item.name}</Text>
+              {item.instructions && (
+                <Text style={styles.instructions} numberOfLines={2}>
+                  📖 {item.instructions}
+                </Text>
+              )}
             </View>
             <TouchableOpacity
               style={styles.deleteButton}
@@ -82,8 +89,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 12,
   },
-  itemImage: { width: 50, height: 50, borderRadius: 8, marginRight: 12 },
-  item: { fontSize: 18, flexShrink: 1 },
+  itemImage: { width: 60, height: 60, borderRadius: 8, marginRight: 12 },
+  item: { fontSize: 18, fontWeight: "bold", flexShrink: 1 },
+  instructions: { fontSize: 14, color: "#555", marginTop: 4 },
   deleteButton: {
     backgroundColor: "#e74c3c",
     padding: 8,

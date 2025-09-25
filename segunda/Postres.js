@@ -130,7 +130,7 @@ export default function Postres({ navigation }) {
         }
     };
 
-    // 🔹 Guardar en favoritos
+    // 🔹 Guardar en favoritos con mensaje dinámico
     const addFavorito = async (receta) => {
         try {
             await addDoc(collection(db, "favoritos"), {
@@ -139,7 +139,7 @@ export default function Postres({ navigation }) {
                 instructions: receta.strInstructions,
                 createdAt: new Date(),
             });
-            alert("✅ Postre agregado a favoritos");
+            alert(`✅ Se agregó "${receta.strMeal}" a favoritos`);
         } catch (error) {
             console.error("Error al agregar favorito: ", error);
             alert("❌ No se pudo agregar a favoritos");
@@ -234,122 +234,24 @@ export default function Postres({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#fff8f0',
-    },
-    title: {
-        fontSize: 26,
-        fontWeight: 'bold',
-        marginBottom: 16,
-        textAlign: 'center',
-        color: '#d35400',
-    },
-    subtitle: {
-        fontSize: 16,
-        marginBottom: 10,
-        textAlign: 'center',
-        color: '#333',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        marginBottom: 12,
-        borderRadius: 8,
-        backgroundColor: '#fff',
-    },
-    button: {
-        backgroundColor: '#d35400',
-        padding: 12,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    buttonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    result: {
-        alignItems: 'center',
-        marginBottom: 20,
-        padding: 12,
-        borderRadius: 12,
-        backgroundColor: '#ffe6cc',
-    },
-    flag: {
-        width: 120,
-        height: 80,
-        marginBottom: 12,
-    },
-    resultText: {
-        fontSize: 16,
-        marginBottom: 6,
-    },
-    recipeListContainer: {
-        marginBottom: 20,
-    },
-    recipeContainer: {
-        backgroundColor: '#ffe6cc',
-        padding: 16,
-        borderRadius: 12,
-        marginBottom: 20,
-    },
-    recetaTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        marginBottom: 12,
-        textAlign: 'center',
-        color: '#2c3e50',
-    },
-    recipeName: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 12,
-        textAlign: 'center',
-    },
-    recipeImage: {
-        width: '100%',
-        height: 200,
-        borderRadius: 12,
-        marginBottom: 12,
-    },
-    recipeInstructions: {
-        fontSize: 16,
-        lineHeight: 22,
-        color: '#333',
-        textAlign: 'justify',
-    },
-    recetaText: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#a94442',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    backButtonBottom: {
-        backgroundColor: '#2c3e50',
-        padding: 12,
-        borderRadius: 8,
-        marginTop: 30,
-        alignItems: 'center',
-    },
-    backButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    favoriteButton: {
-        backgroundColor: "#27ae60",
-        padding: 10,
-        borderRadius: 8,
-        marginTop: 10,
-        alignItems: "center",
-    },
-    favoriteButtonText: {
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: 16,
-    },
+    container: { flex: 1, padding: 16, backgroundColor: '#fff8f0' },
+    title: { fontSize: 26, fontWeight: 'bold', marginBottom: 16, textAlign: 'center', color: '#d35400' },
+    subtitle: { fontSize: 16, marginBottom: 10, textAlign: 'center', color: '#333' },
+    input: { borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 12, borderRadius: 8, backgroundColor: '#fff' },
+    button: { backgroundColor: '#d35400', padding: 12, borderRadius: 8, alignItems: 'center', marginBottom: 20 },
+    buttonText: { color: '#fff', fontWeight: 'bold' },
+    result: { alignItems: 'center', marginBottom: 20, padding: 12, borderRadius: 12, backgroundColor: '#ffe6cc' },
+    flag: { width: 120, height: 80, marginBottom: 12 },
+    resultText: { fontSize: 16, marginBottom: 6 },
+    recipeListContainer: { marginBottom: 20 },
+    recipeContainer: { backgroundColor: '#ffe6cc', padding: 16, borderRadius: 12, marginBottom: 20 },
+    recetaTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12, textAlign: 'center', color: '#2c3e50' },
+    recipeName: { fontSize: 20, fontWeight: 'bold', marginBottom: 12, textAlign: 'center' },
+    recipeImage: { width: '100%', height: 200, borderRadius: 12, marginBottom: 12 },
+    recipeInstructions: { fontSize: 16, lineHeight: 22, color: '#333', textAlign: 'justify' },
+    recetaText: { fontSize: 18, fontWeight: '600', color: '#a94442', textAlign: 'center', marginBottom: 20 },
+    backButtonBottom: { backgroundColor: '#2c3e50', padding: 12, borderRadius: 8, marginTop: 30, alignItems: 'center' },
+    backButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+    favoriteButton: { backgroundColor: "#27ae60", padding: 10, borderRadius: 8, marginTop: 10, alignItems: "center" },
+    favoriteButtonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
 });

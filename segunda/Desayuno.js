@@ -129,19 +129,19 @@ export default function Desayuno({ navigation }) {
     };
 
     // 🔹 Guardar receta en Firebase
-    const guardarFavorito = async (receta) => {
-        try {
-            await addDoc(collection(db, "favoritos"), {
-                name: receta.strMeal,
-                image: receta.strMealThumb,
-                instructions: receta.strInstructions,
-                createdAt: new Date(),
-            });
-            alert("✅ Receta guardada en favoritos");
-        } catch (error) {
-            console.error("Error al guardar favorito: ", error);
-        }
-    };
+const guardarFavorito = async (receta) => {
+    try {
+        await addDoc(collection(db, "favoritos"), {
+            name: receta.strMeal,
+            image: receta.strMealThumb,
+            instructions: receta.strInstructions,
+            createdAt: new Date(),
+        });
+        alert(`✅ ${receta.strMeal} se agregó a favoritos`); // 👉 mensaje con nombre
+    } catch (error) {
+        console.error("Error al guardar favorito: ", error);
+    }
+};
 
     // 🔹 Botón animado
     function AnimatedButton({ onPress, children }) {

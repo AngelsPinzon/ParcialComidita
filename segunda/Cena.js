@@ -138,19 +138,18 @@ export default function Cena({ navigation }) {
         }
     };
 
-    const agregarAFavoritos = async (receta) => {
+    // 👉 función para guardar favorito con mensaje personalizado
+    const guardarFavorito = async (receta) => {
         try {
             await addDoc(collection(db, "favoritos"), {
-                idMeal: receta.idMeal,
-                nombre: receta.strMeal,
-                imagen: receta.strMealThumb,
-                instrucciones: receta.strInstructions || "",
-                categoria: receta.strCategory,
+                name: receta.strMeal,
+                image: receta.strMealThumb,
+                instructions: receta.strInstructions,
+                createdAt: new Date(),
             });
-            alert("✅ Receta agregada a favoritos");
+            alert(`✅ ${receta.strMeal} se agregó a favoritos`); // mensaje con nombre de receta
         } catch (error) {
-            console.error("Error al guardar en favoritos: ", error);
-            alert("❌ No se pudo guardar en favoritos");
+            console.error("Error al guardar favorito: ", error);
         }
     };
 
@@ -223,7 +222,7 @@ export default function Cena({ navigation }) {
                             {/* Botón para agregar a favoritos */}
                             <TouchableOpacity
                                 style={styles.favButton}
-                                onPress={() => agregarAFavoritos(recetaItem)}
+                                onPress={() => guardarFavorito(recetaItem)} // 👈 cambio aquí
                             >
                                 <Text style={styles.favButtonText}>❤️ Agregar a Favoritos</Text>
                             </TouchableOpacity>
