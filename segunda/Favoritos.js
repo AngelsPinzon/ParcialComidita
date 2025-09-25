@@ -168,7 +168,7 @@ export default function Favoritos({ navigation }) {
               <View style={{ flex: 1 }}>
                 <Text style={styles.item}>🍴 {item.name}</Text>
                 <Text style={styles.instructions}>
-                  📌 Categoría: {item.category.join(", ")}
+                  📌 Categoría: {Array.isArray(item.category) ? item.category.join(", ") : item.category || "Sin categoría"}
                 </Text>
                 <Text style={styles.instructions}>
                   🥗 Ingredientes: {item.ingredients}
