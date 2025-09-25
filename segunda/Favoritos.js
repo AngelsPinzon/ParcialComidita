@@ -35,6 +35,9 @@ export default function Favoritos({ navigation }) {
   const [pasos, setPasos] = useState("");
   const [comentario, setComentario] = useState("");
 
+  // Estado para controlar qué favoritos están expandidos
+  const [expandido, setExpandido] = useState({});
+
   // 🔹 Cargar favoritos desde Firestore
   const fetchFavoritos = async () => {
     try {
@@ -61,6 +64,14 @@ export default function Favoritos({ navigation }) {
     fetchFavoritos();
     fetchRecetas();
   }, []);
+
+  // Función para alternar expandido/contraído en favoritos
+  const toggleExpandido = (id) => {
+    setExpandido((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   // 🔹 Guardar receta propia
   const addReceta = async () => {
@@ -138,9 +149,19 @@ export default function Favoritos({ navigation }) {
               <View style={{ flex: 1 }}>
                 <Text style={styles.item}>🍴 {item.name}</Text>
                 {item.instructions && (
-                  <Text style={styles.instructions} numberOfLines={2}>
-                    📖 {item.instructions}
-                  </Text>
+                  <>
+                    <Text
+                      style={styles.instructions}
+                      numberOfLines={expandido[item.id] ? undefined : 2}
+                    >
+                      📖 {item.instructions}
+                    </Text>
+                    <TouchableOpacity onPress={() => toggleExpandido(item.id)}>
+                      <Text style={{ color: "#2980b9", marginTop: 4 }}>
+                        {expandido[item.id] ? "⬆️ Ver menos" : "⬇️ Ver más"}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
                 )}
               </View>
               <TouchableOpacity
@@ -168,7 +189,10 @@ export default function Favoritos({ navigation }) {
               <View style={{ flex: 1 }}>
                 <Text style={styles.item}>🍴 {item.name}</Text>
                 <Text style={styles.instructions}>
-                  📌 Categoría: {Array.isArray(item.category) ? item.category.join(", ") : item.category || "Sin categoría"}
+                  📌 Categoría:{" "}
+                  {Array.isArray(item.category)
+                    ? item.category.join(", ")
+                    : item.category || "Sin categoría"}
                 </Text>
                 <Text style={styles.instructions}>
                   🥗 Ingredientes: {item.ingredients}
