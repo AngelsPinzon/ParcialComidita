@@ -1,5 +1,7 @@
-import React, { useRef } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Animated } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Animated, ActivityIndicator } from 'react-native';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from './firebase'; // 🔥 tu configuración de Firebase
 
 function AnimatedButton({ onPress, children, style }) {
   const scale = useRef(new Animated.Value(1)).current;
@@ -28,10 +30,44 @@ function AnimatedButton({ onPress, children, style }) {
 }
 
 export default function Home({ navigation }) {
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
+  // 🔥 Verificamos si el usuario está logueado
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        navigation.replace("Login"); // Si no está logueado → redirige a Login
+      }
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#d35400" />
+      </View>
+    );
+  }
+
   return (
     <ScrollView style={styles.container}>
       {/* Título principal */}
       <Text style={styles.title}>Bienvenidos a Recetas Gourmet 🍴</Text>
+      <Text style={styles.subtitle}>Hola, {user?.email}</Text>
+
+      {/* Botón de Logout */}
+      <View style={styles.logoutContainer}>
+        <AnimatedButton onPress={() => signOut(auth)}>
+          <View style={[styles.recomendacionButton, { backgroundColor: "#e74c3c" }]}>
+            <Text style={styles.recomendacionText}>🚪 Cerrar sesión</Text>
+          </View>
+        </AnimatedButton>
+      </View>
 
       {/* Imagen principal convertida en botón */}
       <AnimatedButton onPress={() => navigation.navigate('Ontoy')}>
@@ -54,9 +90,7 @@ export default function Home({ navigation }) {
           <View>
             <Image
               style={styles.menuImage}
-              source={{
-                uri: 'https://www.recetasderechupete.com/wp-content/uploads/2018/09/Desayuno.jpg',
-              }}
+              source={{ uri: 'https://www.recetasderechupete.com/wp-content/uploads/2018/09/Desayuno.jpg' }}
             />
             <Text style={styles.menuText}>Desayuno 🥐</Text>
           </View>
@@ -66,9 +100,7 @@ export default function Home({ navigation }) {
           <View>
             <Image
               style={styles.menuImage}
-              source={{
-                uri: 'https://www.shutterstock.com/image-photo/table-food-top-view-600nw-467823860.jpg',
-              }}
+              source={{ uri: 'https://www.shutterstock.com/image-photo/table-food-top-view-600nw-467823860.jpg' }}
             />
             <Text style={styles.menuText}>Almuerzo 🍲</Text>
           </View>
@@ -80,9 +112,7 @@ export default function Home({ navigation }) {
           <View>
             <Image
               style={styles.menuImage}
-              source={{
-                uri: 'https://media-cdn.tripadvisor.com/media/photo-s/11/a2/97/1e/la-cena-de-noche-buena.jpg',
-              }}
+              source={{ uri: 'https://media-cdn.tripadvisor.com/media/photo-s/11/a2/97/1e/la-cena-de-noche-buena.jpg' }}
             />
             <Text style={styles.menuText}>Cena 🍷</Text>
           </View>
@@ -92,9 +122,7 @@ export default function Home({ navigation }) {
           <View>
             <Image
               style={styles.menuImage}
-              source={{
-                uri: 'https://vecinavegetariana.com/wp-content/uploads/2022/03/Merengon-Vegano-3-1.jpeg',
-              }}
+              source={{ uri: 'https://vecinavegetariana.com/wp-content/uploads/2022/03/Merengon-Vegano-3-1.jpeg' }}
             />
             <Text style={styles.menuText}>Postres 🍰</Text>
           </View>
@@ -131,9 +159,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    marginBottom: 16,
+    marginBottom: 8,
     textAlign: "center",
     color: "#d35400",
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 16,
+    color: "#2c3e50",
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   },
   headerImageContainer: {
     position: "relative",
@@ -203,4 +242,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  logoutContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  }
 });

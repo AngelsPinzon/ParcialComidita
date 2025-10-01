@@ -10,20 +10,20 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { db } from "./firebase";
+import { db, auth } from "./firebase"; // 👈 Importamos auth también
 import {
   collection,
   addDoc,
   getDocs,
   deleteDoc,
   doc,
+  query,
+  where,
 } from "firebase/firestore";
 
 export default function Favoritos({ navigation }) {
-  // ⭐ Favoritos
+  const user = auth.currentUser; // 👈 Usuario logueado
   const [favoritos, setFavoritos] = useState([]);
-
-  // 🍲 Mis Recetas
   const [recetas, setRecetas] = useState([]);
   const [showForm, setShowForm] = useState(false);
 
@@ -35,13 +35,15 @@ export default function Favoritos({ navigation }) {
   const [pasos, setPasos] = useState("");
   const [comentario, setComentario] = useState("");
 
-  // Estado para controlar qué favoritos están expandidos
   const [expandido, setExpandido] = useState({});
 
-  // 🔹 Cargar favoritos desde Firestore
+  // 🔹 Cargar favoritos del usuario
   const fetchFavoritos = async () => {
     try {
-      const snapshot = await getDocs(collection(db, "favoritos"));
+      if (!user) return;
+      const favoritosRef = collection(db, "favoritos");
+      const q = query(favoritosRef, where("userId", "==", user.uid));
+      const snapshot = await getDocs(q);
       const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setFavoritos(data);
     } catch (error) {
@@ -49,10 +51,13 @@ export default function Favoritos({ navigation }) {
     }
   };
 
-  // 🔹 Cargar recetas desde Firestore
+  // 🔹 Cargar recetas del usuario
   const fetchRecetas = async () => {
     try {
-      const snapshot = await getDocs(collection(db, "recetas"));
+      if (!user) return;
+      const recetasRef = collection(db, "recetas");
+      const q = query(recetasRef, where("userId", "==", user.uid));
+      const snapshot = await getDocs(q);
       const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setRecetas(data);
     } catch (error) {
@@ -63,9 +68,8 @@ export default function Favoritos({ navigation }) {
   useEffect(() => {
     fetchFavoritos();
     fetchRecetas();
-  }, []);
+  }, [user]);
 
-  // Función para alternar expandido/contraído en favoritos
   const toggleExpandido = (id) => {
     setExpandido((prev) => ({
       ...prev,
@@ -73,7 +77,7 @@ export default function Favoritos({ navigation }) {
     }));
   };
 
-  // 🔹 Guardar receta propia
+  // 🔹 Guardar receta con UID
   const addReceta = async () => {
     if (!nombre || !categoria || !ingredientes || !tiempo || !pasos) {
       Alert.alert("Error", "⚠️ Todos los campos obligatorios deben estar llenos");
@@ -82,6 +86,7 @@ export default function Favoritos({ navigation }) {
 
     try {
       await addDoc(collection(db, "recetas"), {
+        userId: user.uid, // 👈 Guardamos UID del usuario
         name: nombre,
         category: categoria.split(",").map((c) => c.trim()),
         ingredients: ingredientes,
@@ -91,7 +96,6 @@ export default function Favoritos({ navigation }) {
         createdAt: new Date(),
       });
 
-      // Limpiar formulario
       setNombre("");
       setCategoria("");
       setIngredientes("");
@@ -100,7 +104,6 @@ export default function Favoritos({ navigation }) {
       setComentario("");
       setShowForm(false);
 
-      // Refrescar lista
       fetchRecetas();
 
       Alert.alert("✅ Guardado", `${nombre} fue agregada a tus recetas`);
