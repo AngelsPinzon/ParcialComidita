@@ -11,7 +11,7 @@ import {
     ActivityIndicator,
     Animated
 } from 'react-native';
-import { db } from "./firebase";  
+import { db, auth } from "./firebase";
 import { collection, addDoc } from "firebase/firestore";
 
 export default function Postres({ navigation }) {
@@ -133,16 +133,23 @@ export default function Postres({ navigation }) {
     // 🔹 Guardar en favoritos con mensaje dinámico
     const addFavorito = async (receta) => {
         try {
+            const user = auth.currentUser; // 👈 usuario actual
+            if (!user) {
+                alert("⚠️ Debes iniciar sesión para guardar favoritos");
+                return;
+            }
+
             await addDoc(collection(db, "favoritos"), {
+                userId: user.uid, // 👈 importante
                 name: receta.strMeal,
                 image: receta.strMealThumb,
                 instructions: receta.strInstructions,
                 createdAt: new Date(),
             });
-            alert(`✅ Se agregó "${receta.strMeal}" a favoritos`);
+
+            alert(`✅ ${receta.strMeal} se agregó a favoritos`);
         } catch (error) {
-            console.error("Error al agregar favorito: ", error);
-            alert("❌ No se pudo agregar a favoritos");
+            console.error("❌ Error al guardar favorito: ", error);
         }
     };
 

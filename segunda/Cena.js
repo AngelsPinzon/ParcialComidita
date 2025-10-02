@@ -10,7 +10,7 @@ import {
     ActivityIndicator,
     Animated
 } from 'react-native';
-import { db } from './firebase'; // tu configuración de firebase
+import { db, auth } from './firebase'; // tu configuración de firebase
 import { collection, addDoc } from 'firebase/firestore';
 
 export default function Cena({ navigation }) {
@@ -141,15 +141,23 @@ export default function Cena({ navigation }) {
     // 👉 función para guardar favorito con mensaje personalizado
     const guardarFavorito = async (receta) => {
         try {
+            const user = auth.currentUser; // 👈 usuario actual
+            if (!user) {
+                alert("⚠️ Debes iniciar sesión para guardar favoritos");
+                return;
+            }
+
             await addDoc(collection(db, "favoritos"), {
+                userId: user.uid, // 👈 importante
                 name: receta.strMeal,
                 image: receta.strMealThumb,
                 instructions: receta.strInstructions,
                 createdAt: new Date(),
             });
-            alert(`✅ ${receta.strMeal} se agregó a favoritos`); // mensaje con nombre de receta
+
+            alert(`✅ ${receta.strMeal} se agregó a favoritos`);
         } catch (error) {
-            console.error("Error al guardar favorito: ", error);
+            console.error("❌ Error al guardar favorito: ", error);
         }
     };
 

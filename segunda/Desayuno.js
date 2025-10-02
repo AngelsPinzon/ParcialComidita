@@ -10,7 +10,7 @@ import {
     ActivityIndicator,
     Animated
 } from 'react-native';
-import { db } from "./firebase"; // 🔹 Importar conexión con Firebase
+import { db, auth } from "./firebase"; // 🔹 Importar conexión con Firebase
 import { collection, addDoc } from "firebase/firestore";
 
 export default function Desayuno({ navigation }) {
@@ -129,19 +129,27 @@ export default function Desayuno({ navigation }) {
     };
 
     // 🔹 Guardar receta en Firebase
-const guardarFavorito = async (receta) => {
-    try {
-        await addDoc(collection(db, "favoritos"), {
-            name: receta.strMeal,
-            image: receta.strMealThumb,
-            instructions: receta.strInstructions,
-            createdAt: new Date(),
-        });
-        alert(`✅ ${receta.strMeal} se agregó a favoritos`); // 👉 mensaje con nombre
-    } catch (error) {
-        console.error("Error al guardar favorito: ", error);
-    }
-};
+    const guardarFavorito = async (receta) => {
+        try {
+            const user = auth.currentUser; // 👈 usuario actual
+            if (!user) {
+                alert("⚠️ Debes iniciar sesión para guardar favoritos");
+                return;
+            }
+
+            await addDoc(collection(db, "favoritos"), {
+                userId: user.uid, // 👈 importante
+                name: receta.strMeal,
+                image: receta.strMealThumb,
+                instructions: receta.strInstructions,
+                createdAt: new Date(),
+            });
+
+            alert(`✅ ${receta.strMeal} se agregó a favoritos`);
+        } catch (error) {
+            console.error("❌ Error al guardar favorito: ", error);
+        }
+    };
 
     // 🔹 Botón animado
     function AnimatedButton({ onPress, children }) {

@@ -58,15 +58,12 @@ export default function Home({ navigation }) {
     <ScrollView style={styles.container}>
       {/* Título principal */}
       <Text style={styles.title}>Bienvenidos a Recetas Gourmet 🍴</Text>
-      <Text style={styles.subtitle}>Hola, {user?.email}</Text>
 
-      {/* Botón de Logout */}
-      <View style={styles.logoutContainer}>
-        <AnimatedButton onPress={() => signOut(auth)}>
-          <View style={[styles.recomendacionButton, { backgroundColor: "#e74c3c" }]}>
-            <Text style={styles.recomendacionText}>🚪 Cerrar sesión</Text>
-          </View>
-        </AnimatedButton>
+      {/* Saludo */}
+      <View style={styles.userRow}>
+        <Text style={styles.subtitle} numberOfLines={1} ellipsizeMode="tail">
+          Hola, {user?.email}
+        </Text>
       </View>
 
       {/* Imagen principal convertida en botón */}
@@ -146,6 +143,15 @@ export default function Home({ navigation }) {
           </View>
         </AnimatedButton>
       </View>
+
+      {/* 🚪 Botón de Cerrar Sesión al final */}
+      <View style={styles.logoutContainer}>
+        <AnimatedButton onPress={() => signOut(auth)}>
+          <View style={styles.logoutButton}>
+            <Text style={styles.logoutText}>🚪 Cerrar sesión</Text>
+          </View>
+        </AnimatedButton>
+      </View>
     </ScrollView>
   );
 }
@@ -163,11 +169,37 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#d35400",
   },
+  userRow: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingHorizontal: 8,
+  },
   subtitle: {
     fontSize: 16,
-    textAlign: "center",
-    marginBottom: 16,
     color: "#2c3e50",
+    fontWeight: "600",
+  },
+  logoutContainer: {
+    marginTop: 30,
+    marginBottom: 40,
+    alignItems: "center",
+  },
+  logoutButton: {
+    backgroundColor: "#e74c3c",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  logoutText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   centered: {
     flex: 1,
@@ -242,8 +274,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  logoutContainer: {
-    alignItems: "center",
-    marginBottom: 20,
-  }
 });
